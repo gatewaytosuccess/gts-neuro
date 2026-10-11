@@ -120,6 +120,9 @@ enrollments: grant those in Django admin.
 - `GET /api/admin/orders/<id>/` — any order with its buyer, line items, coupon, refund (amount,
   when, by whom, why), Stripe receipt and dashboard links, and the enrollments it still holds;
   admins only
+- `POST /api/admin/orders/<id>/refund/` — refunds what remains of a paid order through Stripe,
+  given a `reason`, and marks it refunded; enrollments are kept. 409 for an order that isn't paid,
+  502 with Stripe's message if Stripe refuses; admins only
 - `GET /api/learn/<slug>/` — a course's outline for the lesson viewer: every module and lesson in
   order, each lesson `locked` or not and `completed` or not, the caller's `access` and their
   completed and total lesson counts; signing in is optional. Only an enrolled caller sees anything
