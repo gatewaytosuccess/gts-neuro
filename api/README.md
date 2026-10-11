@@ -117,6 +117,9 @@ enrollments: grant those in Django admin.
 - `GET /api/admin/orders/` — every order, newest first, with its buyer and course titles; `q`
   matches the buyer's name or email or an exact order id, `status` takes one order status and
   answers 400 for any other; admins only
+- `GET /api/admin/orders/<id>/` — any order with its buyer, line items, coupon, refund (amount,
+  when, by whom, why), Stripe receipt and dashboard links, and the enrollments it still holds;
+  admins only
 - `GET /api/learn/<slug>/` — a course's outline for the lesson viewer: every module and lesson in
   order, each lesson `locked` or not and `completed` or not, the caller's `access` and their
   completed and total lesson counts; signing in is optional. Only an enrolled caller sees anything

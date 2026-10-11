@@ -171,7 +171,11 @@ function Progress({ enrollment }: { enrollment: AdminEnrollment }) {
   );
 }
 
-function EnrollmentStatusBadge({ status }: { status: EnrollmentStatus }) {
+export function EnrollmentStatusBadge({
+  status,
+}: {
+  status: EnrollmentStatus;
+}) {
   return (
     <span
       className={`type-label-caps inline-block whitespace-nowrap rounded-full px-sm py-xs ${

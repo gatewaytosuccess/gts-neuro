@@ -200,11 +200,19 @@ function OrderTable({ orders }: { orders: AdminOrderSummary[] }) {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id} className="border-b border-rule align-top">
-              <td className="type-data-md whitespace-nowrap px-sm py-sm text-meta-text">
-                <time dateTime={order.created_at}>
-                  {formatDate(order.created_at)}
-                </time>
-              </td>
+              <th
+                scope="row"
+                className="type-data-md whitespace-nowrap px-sm py-sm font-normal"
+              >
+                <Link
+                  href={`/admin/orders/${order.id}`}
+                  className="text-primary hover:underline"
+                >
+                  <time dateTime={order.created_at}>
+                    {formatDate(order.created_at)}
+                  </time>
+                </Link>
+              </th>
               <td className="px-sm py-sm">
                 <span className="type-label-lg block break-words text-accent-strong">
                   {order.buyer.name || order.buyer.email}

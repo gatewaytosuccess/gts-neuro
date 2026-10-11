@@ -16,5 +16,10 @@ urlpatterns = [
         name="user-me-order",
     ),
     path("admin/orders/", views.AdminOrderListView.as_view(), name="admin-order-list"),
+    path(
+        "admin/orders/<uuid:pk>/",
+        views.AdminOrderDetailView.as_view(),
+        name="admin-order-detail",
+    ),
     path("webhooks/stripe/", webhooks.stripe_webhook, name="stripe-webhook"),
 ]
