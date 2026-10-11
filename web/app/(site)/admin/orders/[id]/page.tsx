@@ -10,6 +10,8 @@ import { requireAdmin } from "../../_lib/require-admin";
 import { EnrollmentStatusBadge } from "../../users/_components/enrollments";
 import { StatusBadge as AccountStatusBadge } from "../../users/_components/status-badge";
 import { OrderStatusBadge } from "../_components/order-status-badge";
+import { RefundDialog } from "../_components/refund-dialog";
+import { refundOrder } from "../_lib/refund-actions";
 
 export const metadata: Metadata = {
   title: "Order · Admin",
@@ -60,12 +62,14 @@ export default async function AdminOrderPage({
         <Summary order={order} />
       </section>
 
-      {(order.refunded_cents > 0 || order.refunded_at) && (
+      {(order.status === "paid" ||
+        order.refunded_cents > 0 ||
+        order.refunded_at) && (
         <section aria-labelledby="refund-heading" className="mt-3xl">
           <h2 id="refund-heading" className="type-headline-sm">
             Refund
           </h2>
-          <Refund order={order} />
+          <Refund order={order} buyerName={buyerName} />
         </section>
       )}
 
@@ -222,9 +226,56 @@ function SummaryRow({
   );
 }
 
-function Refund({ order }: { order: AdminOrderDetail }) {
+function Refund({
+  order,
+  buyerName,
+}: {
+  order: AdminOrderDetail;
+  buyerName: string;
+}) {
   const partial = order.refunded_cents < order.total_cents;
+  const keptAccess =
+    order.status === "refunded" &&
+    order.enrollments.some((enrollment) => enrollment.status === "active");
 
+  return (
+    <>
+      {order.refunded_cents > 0 ? (
+        <RefundDetails order={order} partial={partial} />
+      ) : (
+        <p className="type-body-md mt-md">Nothing has been refunded.</p>
+      )}
+      {order.status === "paid" && (
+        <RefundDialog
+          amountCents={order.total_cents - order.refunded_cents}
+          buyerName={buyerName}
+          refund={refundOrder.bind(null, order.id)}
+        />
+      )}
+      {keptAccess && (
+        <p className="type-body-sm mt-lg text-meta-text">
+          {buyerName} still has access to this order&rsquo;s courses. Revoke it
+          on{" "}
+          <Link
+            href={`/admin/users/${order.buyer.id}`}
+            className="text-primary underline"
+          >
+            their page
+          </Link>{" "}
+          if needed.
+        </p>
+      )}
+    </>
+  );
+}
+
+function RefundDetails({
+  order,
+  partial,
+}: {
+  order: AdminOrderDetail;
+  partial: boolean;
+}) {
   return (
     <dl className="mt-md grid gap-x-md gap-y-xs sm:grid-cols-[max-content_1fr] sm:gap-y-md">
       <div className="contents">

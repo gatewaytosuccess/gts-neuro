@@ -185,7 +185,11 @@ class TestAnEarlierPurchase:
         order.refresh_from_db()
         assert order.status == OrderStatus.REFUNDED
         assert fake_stripe.named("create_refund") == [
-            ("create_refund", ("pi_test",), {"idempotency_key": f"refund-{order.pk}"})
+            (
+                "create_refund",
+                ("pi_test",),
+                {"amount": order.total_cents, "idempotency_key": f"refund-{order.pk}"},
+            )
         ]
 
     def test_records_the_refund_with_no_admin(self, fake_stripe, bought, order):

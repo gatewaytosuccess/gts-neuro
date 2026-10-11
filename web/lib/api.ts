@@ -1278,3 +1278,21 @@ export const fetchAdminOrder = cache(
   async (id: string): Promise<AdminOrderDetail> =>
     apiFetch<AdminOrderDetail>(`/api/admin/orders/${encodeURIComponent(id)}/`),
 );
+
+/**
+ * Refunds what remains of a paid order; its enrollments are kept. Throws
+ * `ApiError` with status 400 and a `FieldErrors` body for a blank reason
+ * (`reason`), 409 with a `detail` body for an order that isn't paid or has no
+ * payment on record, 502 with Stripe's message as `detail` when Stripe
+ * refuses, 404 for an unknown id, 403 for anyone but an admin, and on any
+ * other failure.
+ */
+export async function refundAdminOrder(
+  id: string,
+  reason: string,
+): Promise<AdminOrderDetail> {
+  return apiFetch<AdminOrderDetail>(
+    `/api/admin/orders/${encodeURIComponent(id)}/refund/`,
+    { method: "POST", body: JSON.stringify({ reason }) },
+  );
+}
