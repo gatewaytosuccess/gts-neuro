@@ -9,11 +9,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from courses.models import Course
+from enrollments.models import Enrollment
 from users.permissions import IsAdmin
 
 from .checkout import AlreadyEnrolled, confirm, start_checkout
 from .models import Order, OrderItem, OrderStatus
 from .serializers import (
+    AdminOrderDetailSerializer,
     AdminOrderFiltersSerializer,
     AdminOrderListSerializer,
     OrderReceiptSerializer,
@@ -133,3 +135,20 @@ class AdminOrderListView(generics.ListAPIView):
             orders = orders.filter(status=status_filter)
 
         return orders.order_by("-created_at")
+
+
+class AdminOrderDetailView(generics.RetrieveAPIView):
+    """Any order, whatever its status, with its buyer, line items, refund and enrollments."""
+
+    serializer_class = AdminOrderDetailSerializer
+    permission_classes = [IsAdmin]
+    queryset = Order.objects.select_related("user", "coupon", "refunded_by").prefetch_related(
+        Prefetch(
+            "items",
+            queryset=OrderItem.objects.select_related("course").order_by("course__title"),
+        ),
+        Prefetch(
+            "enrollments",
+            queryset=Enrollment.objects.select_related("course").order_by("course__title"),
+        ),
+    )

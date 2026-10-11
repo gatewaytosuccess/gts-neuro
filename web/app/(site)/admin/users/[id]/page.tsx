@@ -230,11 +230,19 @@ function OrderTable({ orders }: { orders: AdminUserOrder[] }) {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id} className="border-b border-rule align-top">
-              <td className="type-data-md whitespace-nowrap px-sm py-sm text-meta-text">
-                <time dateTime={order.created_at}>
-                  {formatDate(order.created_at)}
-                </time>
-              </td>
+              <th
+                scope="row"
+                className="type-data-md whitespace-nowrap px-sm py-sm font-normal"
+              >
+                <Link
+                  href={`/admin/orders/${order.id}`}
+                  className="text-primary hover:underline"
+                >
+                  <time dateTime={order.created_at}>
+                    {formatDate(order.created_at)}
+                  </time>
+                </Link>
+              </th>
               <td className="type-body-sm px-sm py-sm">
                 <ul>
                   {order.items.map((item, index) => (

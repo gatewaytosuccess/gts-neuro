@@ -1228,3 +1228,53 @@ export async function fetchAdminOrders({
   const query = params.size ? `?${params}` : "";
   return apiFetch<Paginated<AdminOrderSummary>>(`/api/admin/orders/${query}`);
 }
+
+export type AdminOrderDetail = {
+  id: string;
+  status: OrderStatus;
+  created_at: string;
+  updated_at: string;
+  subtotal_cents: number;
+  /** Null without a coupon. */
+  coupon_code: string | null;
+  discount_cents: number;
+  total_cents: number;
+  /** Partial refunds included. */
+  refunded_cents: number;
+  /** Null until refunded in full. */
+  refunded_at: string | null;
+  /** Null unless refunded from the admin area. */
+  refunded_by: { id: string; name: string } | null;
+  /** Blank unless refunded from the admin area. */
+  refund_reason: string;
+  /** Blank until paid, and sometimes after. */
+  receipt_url: string;
+  /** The payment in the Stripe dashboard; blank until paid. */
+  stripe_payment_url: string;
+  /** `name` is blank when Clerk has no name for them. */
+  buyer: { id: string; name: string; email: string; status: AccountStatus };
+  /** By course title. */
+  items: { course_id: string; title: string; unit_price_cents: number }[];
+  /**
+   * By course title. Only those the order still holds: one a later order
+   * took over belongs to that order.
+   */
+  enrollments: {
+    id: string;
+    course_id: string;
+    title: string;
+    status: EnrollmentStatus;
+    /** Null unless revoked. */
+    revoked_at: string | null;
+  }[];
+};
+
+/**
+ * Any order, whatever its status. Throws `ApiError` with status 404 for an
+ * unknown or malformed id, 403 for anyone but an admin, and on any other
+ * failure. Deduplicated per request.
+ */
+export const fetchAdminOrder = cache(
+  async (id: string): Promise<AdminOrderDetail> =>
+    apiFetch<AdminOrderDetail>(`/api/admin/orders/${encodeURIComponent(id)}/`),
+);
