@@ -29,6 +29,10 @@ class AlreadyEnrolled(Exception):
     """The user holds an active enrollment in one of the courses."""
 
 
+class NotRefundable(Exception):
+    """The order can't be refunded from the admin area. The message says why."""
+
+
 def start_checkout(user, courses):
     """Creates a ``pending`` order for ``courses`` and its Checkout Session.
 
@@ -269,6 +273,53 @@ def record_refund(order, charge):
     return order
 
 
+def refund_remainder(order, *, admin, reason):
+    """Refunds what remains of a ``paid`` order through Stripe and marks it
+    ``refunded`` by ``admin`` for ``reason``. Enrollments are never touched.
+
+    Raises ``NotRefundable`` for any other status or an order with no
+    PaymentIntent, and ``stripe.StripeError`` with nothing written if Stripe
+    refuses the refund.
+    """
+    with transaction.atomic():
+        order = Order.objects.select_for_update().get(pk=order.pk)
+        if order.status != OrderStatus.PAID:
+            raise NotRefundable("Only a paid order can be refunded.")
+        if not order.payment_intent_id:
+            raise NotRefundable(
+                "Stripe has no payment on record for this order. Refund it in the Stripe dashboard."
+            )
+
+        amount = order.total_cents - order.refunded_cents
+        stripe_api.create_refund(
+            order.payment_intent_id,
+            amount=amount,
+            reason="requested_by_customer",
+            metadata={"admin_user_id": str(admin.pk)},
+            # Keyed by amount too: a partial refund in Stripe since an earlier
+            # attempt changes what remains.
+            idempotency_key=f"admin-refund-{order.pk}-{amount}",
+        )
+        order.status = OrderStatus.REFUNDED
+        order.refunded_cents = order.total_cents
+        order.refunded_at = timezone.now()
+        order.refunded_by = admin
+        order.refund_reason = reason
+        order.save(
+            update_fields=[
+                "status",
+                "refunded_cents",
+                "refunded_at",
+                "refunded_by",
+                "refund_reason",
+                "updated_at",
+            ]
+        )
+
+    logger.info("Admin %s refunded %s cents of order %s: %s", admin.pk, amount, order.pk, reason)
+    return order
+
+
 def confirm(order):
     """Fulfils a ``pending`` order if Stripe now reports its session paid.
 
@@ -315,7 +366,11 @@ def refund(order, session):
         order.user_id,
     )
     # The key makes a retry after a rolled-back fulfil return the first refund.
-    stripe_api.create_refund(session.get("payment_intent"), idempotency_key=f"refund-{order.pk}")
+    stripe_api.create_refund(
+        session.get("payment_intent"),
+        amount=order.total_cents,
+        idempotency_key=f"refund-{order.pk}",
+    )
 
 
 def enroll(order, course_id):

@@ -43,6 +43,16 @@ class AdminOrderFiltersSerializer(serializers.Serializer):
     status = serializers.ChoiceField(choices=OrderStatus.choices, required=False, allow_blank=True)
 
 
+class AdminOrderRefundSerializer(serializers.Serializer):
+    reason = serializers.CharField(
+        max_length=500,
+        error_messages={
+            "required": "Give a reason for refunding this order.",
+            "blank": "Give a reason for refunding this order.",
+        },
+    )
+
+
 class AdminOrderBuyerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

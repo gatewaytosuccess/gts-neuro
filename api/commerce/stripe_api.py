@@ -52,10 +52,13 @@ def retrieve_payment_intent_metadata(payment_intent_id):
     return _client().v1.payment_intents.retrieve(payment_intent_id).metadata.to_dict()
 
 
-def create_refund(payment_intent_id, *, idempotency_key):
-    """Refunds the PaymentIntent in full. A repeated ``idempotency_key`` returns
-    the first refund instead of making another."""
-    return _client().v1.refunds.create(
-        {"payment_intent": payment_intent_id},
-        {"idempotency_key": idempotency_key},
-    )
+def create_refund(payment_intent_id, *, amount, idempotency_key, reason=None, metadata=None):
+    """Refunds ``amount`` cents of the PaymentIntent. ``reason`` is one of
+    Stripe's refund reasons. A repeated ``idempotency_key`` returns the first
+    refund instead of making another."""
+    params = {"payment_intent": payment_intent_id, "amount": amount}
+    if reason:
+        params["reason"] = reason
+    if metadata:
+        params["metadata"] = metadata
+    return _client().v1.refunds.create(params, {"idempotency_key": idempotency_key})

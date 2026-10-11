@@ -12,12 +12,13 @@ from courses.models import Course
 from enrollments.models import Enrollment
 from users.permissions import IsAdmin
 
-from .checkout import AlreadyEnrolled, confirm, start_checkout
+from .checkout import AlreadyEnrolled, NotRefundable, confirm, refund_remainder, start_checkout
 from .models import Order, OrderItem, OrderStatus
 from .serializers import (
     AdminOrderDetailSerializer,
     AdminOrderFiltersSerializer,
     AdminOrderListSerializer,
+    AdminOrderRefundSerializer,
     OrderReceiptSerializer,
     OrderSerializer,
 )
@@ -152,3 +153,34 @@ class AdminOrderDetailView(generics.RetrieveAPIView):
             queryset=Enrollment.objects.select_related("course").order_by("course__title"),
         ),
     )
+
+
+class AdminOrderRefundView(generics.GenericAPIView):
+    """Takes ``{"reason": ...}`` and refunds what remains of a ``paid`` order.
+    Access is kept: enrollments are never touched.
+
+    Answers 400 for a blank or missing reason, 409 for an order that isn't
+    paid or has no payment on record, and 502 with Stripe's message, nothing
+    written, if Stripe refuses. Returns the detail payload.
+    """
+
+    serializer_class = AdminOrderDetailSerializer
+    permission_classes = [IsAdmin]
+    queryset = AdminOrderDetailView.queryset
+
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        serializer = AdminOrderRefundSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            refund_remainder(order, admin=request.user, reason=serializer.validated_data["reason"])
+        except NotRefundable as error:
+            return Response({"detail": str(error)}, status=status.HTTP_409_CONFLICT)
+        except stripe.StripeError as error:
+            logger.exception("Stripe refused to refund order %s.", order.pk)
+            return Response(
+                {"detail": error.user_message or "Stripe couldn't refund this order."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+        return Response(self.get_serializer(self.get_object()).data)

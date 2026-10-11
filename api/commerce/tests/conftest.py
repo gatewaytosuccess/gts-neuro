@@ -60,10 +60,10 @@ class FakeStripe:
             )
         return SimpleNamespace(id=session_id, status="expired")
 
-    def create_refund(self, payment_intent_id, *, idempotency_key):
-        self._record("create_refund", payment_intent_id, idempotency_key=idempotency_key)
+    def create_refund(self, payment_intent_id, **kwargs):
+        self._record("create_refund", payment_intent_id, **kwargs)
         if self.refuse_refunds:
-            raise stripe.APIConnectionError("Stripe is unreachable")
+            raise stripe.InvalidRequestError("Charge ch_test has been disputed.", None)
         return SimpleNamespace(id=f"re_{next(self._ids)}", status="succeeded")
 
     def retrieve_payment_intent(self, payment_intent_id):

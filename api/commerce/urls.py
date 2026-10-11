@@ -21,5 +21,10 @@ urlpatterns = [
         views.AdminOrderDetailView.as_view(),
         name="admin-order-detail",
     ),
+    path(
+        "admin/orders/<uuid:pk>/refund/",
+        views.AdminOrderRefundView.as_view(),
+        name="admin-order-refund",
+    ),
     path("webhooks/stripe/", webhooks.stripe_webhook, name="stripe-webhook"),
 ]
