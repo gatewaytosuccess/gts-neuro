@@ -1,3 +1,7 @@
+## High-level Architecture
+
+![System Architecture Image](./docs/architecture/System_Architecture.png)
+
 ## Prerequisites
 
 - Python 3.13
