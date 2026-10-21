@@ -143,6 +143,16 @@ enrollments: grant those in Django admin.
 Any admin write to a published course, its curriculum or its lessons that would leave it
 unpublishable is rolled back and answers 400 with `{"problems": [...]}`.
 
+### In production
+
+```bash
+.venv/bin/python manage.py migrate
+.venv/bin/gunicorn config.wsgi --bind 0.0.0.0:$PORT
+```
+
+Set `DJANGO_SETTINGS_MODULE=config.settings.prod`. Static files aren't served, so
+Django admin renders unstyled; only the JSON API is meant to be reachable.
+
 ## Tests
 
 ```bash
