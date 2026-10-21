@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// Covers notFound() thrown inside the group; unmatched URLs fall to Next's own page.
+// Covers notFound() thrown inside the group; unmatched URLs render app/not-found.tsx.
 export default function LearnNotFound() {
   return (
     <main className="mx-auto w-full max-w-[1200px] flex-1 px-md py-2xl sm:px-margin">
