@@ -1,0 +1,40 @@
+# Restores the public demo's database to its seed. Run it by hand for the first seed.
+# Scheduled workflows only run from the default branch, so this file lives on main
+# while the code it runs comes from demo.
+name: Demo reset
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-reset
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: api
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DEMO_LEARNER_EMAIL: ${{ secrets.DEMO_LEARNER_EMAIL }}
+      DEMO_ADMIN_EMAIL: ${{ secrets.DEMO_ADMIN_EMAIL }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: demo
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: api/.python-version
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python manage.py seed_demo --reset
