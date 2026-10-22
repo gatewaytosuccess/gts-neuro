@@ -22,7 +22,7 @@ api/
       dev.py         local development (DEBUG, browsable API, console email)
       prod.py        RDS + TLS + security headers
     urls.py          / admin/ and /api/
-  common/            UUID + timestamp base models, /api/health/, the S3 storage module
+  common/            UUID + timestamp base models, /api/ping/ and /api/health/, the S3 storage module
   users/             custom User model, Clerk JWT authentication, Clerk webhook, IsAdmin
   courses/           Course -> Module -> Lesson
   enrollments/       Enrollment, LessonProgress
@@ -80,7 +80,8 @@ enrollments: grant those in Django admin.
 .venv/bin/python manage.py runserver    # http://127.0.0.1:8000
 ```
 
-- `GET /api/health/` — liveness plus a database connection check
+- `GET /api/ping/` — liveness only; never touches the database
+- `GET /api/health/` — readiness: 503 if the database is unreachable
 - `GET /api/users/me/` — the signed-in user's account row
 - `POST /api/webhooks/clerk/` — Clerk `user.*` events, Svix-signed
 - `POST /api/checkout/` — starts a Stripe Checkout for `{"course": "<slug>"}` and answers `{url}`

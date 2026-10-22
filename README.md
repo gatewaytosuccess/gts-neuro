@@ -229,7 +229,8 @@ Needed for checkout and refunds. Dev uses Stripe's test mode.
 .venv/bin/python manage.py runserver    # http://127.0.0.1:8000
 ```
 
-- `GET /api/health/` — liveness plus a database connection check
+- `GET /api/ping/` — liveness only; never touches the database
+- `GET /api/health/` — readiness: 503 if the database is unreachable
 - `/admin/` — Django admin (superuser password login, unrelated to Clerk)
 
 Settings default to `config.settings.dev`; production sets
