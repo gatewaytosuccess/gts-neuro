@@ -1,7 +1,7 @@
 # The public demo's API. Deploys the demo branch.
 services:
   - type: web
-    name: gts-demo-api
+    name: gts-neuro-demo-api
     runtime: python
     plan: free
     region: oregon
