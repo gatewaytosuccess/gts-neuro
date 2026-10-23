@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "enrollments",
     "commerce",
     "reviews",
+    "demo",
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "demo.middleware.DemoGuardMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -142,6 +144,10 @@ AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", "")
 AWS_PRIVATE_BUCKET_NAME = env("AWS_PRIVATE_BUCKET_NAME", "")
 AWS_THUMBNAIL_BUCKET_NAME = env("AWS_THUMBNAIL_BUCKET_NAME", "")
 CLOUDFRONT_DOMAIN = env("CLOUDFRONT_DOMAIN", "")
+
+# The two shared demo accounts. The seed creates them; the guard protects their enrollments.
+DEMO_LEARNER_EMAIL = env("DEMO_LEARNER_EMAIL", "")
+DEMO_ADMIN_EMAIL = env("DEMO_ADMIN_EMAIL", "")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

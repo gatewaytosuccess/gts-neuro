@@ -9,14 +9,11 @@ export function PurchasePanel({
   course,
   enrollment,
   isAdmin,
-  checkoutUnavailable,
   className = "",
 }: {
   course: CourseDetail;
   enrollment: EnrollmentState;
   isAdmin: boolean;
-  /** The last checkout couldn't be started. */
-  checkoutUnavailable: boolean;
   className?: string;
 }) {
   return (
@@ -52,11 +49,7 @@ export function PurchasePanel({
           <p className="type-data-md mt-sm">
             {formatPrice(course.price_cents)}
           </p>
-          <BuyButton
-            slug={course.slug}
-            label="Buy again"
-            unavailable={checkoutUnavailable}
-          />
+          <BuyButton label="Buy again" />
           <p className="type-caption mt-xs text-meta-text">
             Your progress is saved.
           </p>
@@ -75,11 +68,7 @@ export function PurchasePanel({
       {enrollment === "none" && (
         <>
           <p className="type-headline-sm">{formatPrice(course.price_cents)}</p>
-          <BuyButton
-            slug={course.slug}
-            label="Buy now"
-            unavailable={checkoutUnavailable}
-          />
+          <BuyButton label="Buy now" />
         </>
       )}
 
@@ -99,32 +88,20 @@ export function PurchasePanel({
   );
 }
 
-function BuyButton({
-  slug,
-  label,
-  unavailable,
-}: {
-  slug: string;
-  label: string;
-  unavailable: boolean;
-}) {
+function BuyButton({ label }: { label: string }) {
   return (
     <>
-      {/* Not <Link>: a prefetch of /checkout would start a checkout. */}
-      <a
-        href={`/checkout?course=${encodeURIComponent(slug)}`}
-        className="button-primary mt-md"
+      <button
+        type="button"
+        disabled
+        aria-describedby="checkout-disabled"
+        className="button-primary mt-md disabled:cursor-not-allowed disabled:opacity-60"
       >
         {label}
-      </a>
-      {unavailable && (
-        <p
-          role="alert"
-          className="type-body-sm mt-sm rounded-sm bg-warning-subtle px-sm py-sm text-warning"
-        >
-          Payment is unavailable right now. Please try again in a moment.
-        </p>
-      )}
+      </button>
+      <p id="checkout-disabled" className="type-caption mt-xs text-meta-text">
+        Checkout is turned off in this demo.
+      </p>
     </>
   );
 }

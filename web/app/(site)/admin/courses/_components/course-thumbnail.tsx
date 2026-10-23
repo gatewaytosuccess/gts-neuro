@@ -3,17 +3,13 @@
 import { useActionState } from "react";
 
 import type { UploadResult, UploadTicket } from "../_lib/uploads";
-import { FileUpload } from "./file-upload";
-
-const THUMBNAIL_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+import { DemoDisabled } from "../../_components/demo-disabled";
 
 const frameClassName = "aspect-video w-full max-w-[480px] rounded-xs";
 
 export function CourseThumbnail({
   url,
   removable,
-  requestUpload,
-  save,
   remove,
 }: {
   /** Blank when there's no thumbnail. */
@@ -47,14 +43,7 @@ export function CourseThumbnail({
       )}
 
       <div className="flex flex-wrap items-start gap-md">
-        <FileUpload
-          id="course-thumbnail"
-          buttonLabel={url ? "Replace" : "Upload thumbnail"}
-          accept={THUMBNAIL_TYPES}
-          hint="JPEG, PNG or WebP, up to 5 MB. 16:9 suits the catalog cards, such as 1600 × 900."
-          requestUpload={requestUpload}
-          save={save}
-        />
+        <DemoDisabled />
         {url && removable && (
           <form action={removeAction}>
             <button

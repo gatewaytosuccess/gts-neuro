@@ -9,6 +9,7 @@ import {
   type CurriculumModule,
 } from "@/lib/api";
 
+import { DemoDisabled } from "../../_components/demo-disabled";
 import { requireAdmin } from "../../_lib/require-admin";
 import { CourseDetailsForm } from "../_components/course-details-form";
 import { CourseThumbnail } from "../_components/course-thumbnail";
@@ -77,11 +78,15 @@ export default async function AdminCoursePage({
         <h1 className="type-headline-md measure">{course.title}</h1>
         <StatusBadge status={course.status} />
       </div>
-      <PublishControl
-        published={published}
-        publish={publishCourse.bind(null, course.id)}
-        unpublish={unpublish}
-      />
+      {published ? (
+        <DemoDisabled className="mt-md" />
+      ) : (
+        <PublishControl
+          published={published}
+          publish={publishCourse.bind(null, course.id)}
+          unpublish={unpublish}
+        />
+      )}
 
       <section aria-labelledby="course-details-heading" className="mt-2xl">
         <h2 id="course-details-heading" className="type-headline-sm">

@@ -1,0 +1,47 @@
+# The public demo's API. Deploys the demo branch.
+services:
+  - type: web
+    name: gts-demo-api
+    runtime: python
+    plan: free
+    region: oregon
+    branch: demo
+    rootDir: api
+    buildCommand: pip install -r requirements.txt && python manage.py migrate
+    startCommand: gunicorn config.wsgi --bind 0.0.0.0:$PORT --workers 2
+    healthCheckPath: /api/ping/
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_ALLOWED_HOSTS
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_JWKS_URL
+        sync: false
+      - key: CLERK_ISSUER
+        sync: false
+      - key: CLERK_AUTHORIZED_PARTIES
+        sync: false
+      - key: WEB_APP_URL
+        sync: false
+      - key: AWS_S3_REGION_NAME
+        value: us-west-1
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_PRIVATE_BUCKET_NAME
+        sync: false
+      - key: AWS_THUMBNAIL_BUCKET_NAME
+        sync: false
+      - key: CLOUDFRONT_DOMAIN
+        sync: false
+      - key: DEMO_LEARNER_EMAIL
+        sync: false
+      - key: DEMO_ADMIN_EMAIL
+        sync: false

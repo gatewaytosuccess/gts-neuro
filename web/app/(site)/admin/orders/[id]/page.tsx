@@ -6,12 +6,11 @@ import { ApiError, fetchAdminOrder, type AdminOrderDetail } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
 
 import { formatDate, formatDateTime } from "../../_lib/format";
+import { DemoDisabled } from "../../_components/demo-disabled";
 import { requireAdmin } from "../../_lib/require-admin";
 import { EnrollmentStatusBadge } from "../../users/_components/enrollments";
 import { StatusBadge as AccountStatusBadge } from "../../users/_components/status-badge";
 import { OrderStatusBadge } from "../_components/order-status-badge";
-import { RefundDialog } from "../_components/refund-dialog";
-import { refundOrder } from "../_lib/refund-actions";
 
 export const metadata: Metadata = {
   title: "Order · Admin",
@@ -245,13 +244,7 @@ function Refund({
       ) : (
         <p className="type-body-md mt-md">Nothing has been refunded.</p>
       )}
-      {order.status === "paid" && (
-        <RefundDialog
-          amountCents={order.total_cents - order.refunded_cents}
-          buyerName={buyerName}
-          refund={refundOrder.bind(null, order.id)}
-        />
-      )}
+      {order.status === "paid" && <DemoDisabled className="mt-lg" />}
       {keptAccess && (
         <p className="type-body-sm mt-lg text-meta-text">
           {buyerName} still has access to this order&rsquo;s courses. Revoke it

@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import type { LessonFileKind } from "@/lib/api";
 
 import type { UploadResult, UploadTicket } from "../_lib/uploads";
-import { FileUpload } from "./file-upload";
+import { DemoDisabled } from "../../_components/demo-disabled";
 
 const KINDS = {
   video: {
@@ -52,10 +52,7 @@ export function readVideoDuration(file: File): Promise<number | null> {
 export function LessonFile({
   kind,
   url,
-  requestUpload,
-  save,
   remove,
-  onChoose,
 }: {
   kind: LessonFileKind;
   /** Blank when the lesson has no such file. */
@@ -65,7 +62,7 @@ export function LessonFile({
   remove: () => Promise<UploadResult>;
   onChoose?: (file: File) => void;
 }) {
-  const { title, accept, hint, uploadLabel, empty, present } = KINDS[kind];
+  const { title, empty, present } = KINDS[kind];
   const [removing, startRemoving] = useTransition();
   const [removeError, setRemoveError] = useState<string>();
   const headingId = `lesson-${kind}-heading`;
@@ -97,15 +94,7 @@ export function LessonFile({
         )}
 
         <div className="flex flex-wrap items-start gap-md">
-          <FileUpload
-            id={`lesson-${kind}`}
-            buttonLabel={url ? "Replace" : uploadLabel}
-            accept={accept}
-            hint={hint}
-            requestUpload={requestUpload}
-            save={save}
-            onChoose={onChoose}
-          />
+          <DemoDisabled />
           {url && (
             <button
               type="button"

@@ -6,7 +6,6 @@ import {
   ApiError,
   fetchAdminUser,
   fetchAdminUserEnrollments,
-  fetchCurrentUser,
   type AdminCourseSummary,
   type AdminEnrollment,
   type AdminUserDetail,
@@ -15,17 +14,17 @@ import {
 } from "@/lib/api";
 import { Stars } from "@/components/stars";
 import { formatPrice } from "@/lib/format";
+import { isDemoAccount } from "@/lib/demo";
 
 import { formatDate } from "../../_lib/format";
+import { DemoDisabled } from "../../_components/demo-disabled";
 import { requireAdmin } from "../../_lib/require-admin";
 import { ORDER_STATUS_LABELS } from "../../orders/_components/order-status-badge";
 import { Enrollments } from "../_components/enrollments";
-import { RoleControl } from "../_components/role-control";
 import { StatusBadge } from "../_components/status-badge";
-import { SuspensionControl } from "../_components/suspension-control";
 import { UserAvatar } from "../_components/user-avatar";
 import { fetchEveryAdminCourse } from "../_lib/courses";
-import { changeUserRole } from "../_lib/role-actions";
+import { ROLE_LABELS } from "../_lib/format";
 
 export async function generateMetadata({
   params,
@@ -54,14 +53,12 @@ export default async function AdminUserPage({
   let user: AdminUserDetail;
   let enrollments: AdminEnrollment[];
   let courses: AdminCourseSummary[];
-  let viewerId: string | undefined;
   try {
     [user, enrollments, courses] = await Promise.all([
       fetchAdminUser(id),
       fetchAdminUserEnrollments(id),
       fetchEveryAdminCourse(),
     ]);
-    viewerId = (await fetchCurrentUser())?.id;
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound();
     return (
@@ -83,8 +80,8 @@ export default async function AdminUserPage({
         <h2 id="access-heading" className="type-headline-sm">
           Access
         </h2>
-        <Access user={user} isSelf={user.id === viewerId} />
-        <SuspensionControl user={user} isSelf={user.id === viewerId} />
+        <Access user={user} />
+        <DemoDisabled className="mt-md" />
       </section>
 
       <section aria-labelledby="enrollments-heading" className="mt-3xl">
@@ -96,6 +93,7 @@ export default async function AdminUserPage({
           name={user.name || user.email}
           enrollments={enrollments}
           courses={courses}
+          revocable={!isDemoAccount(user.email)}
         />
       </section>
 
@@ -163,22 +161,13 @@ function Header({ user }: { user: AdminUserDetail }) {
   );
 }
 
-function Access({ user, isSelf }: { user: AdminUserDetail; isSelf: boolean }) {
+function Access({ user }: { user: AdminUserDetail }) {
   return (
     <dl className="mt-md grid gap-x-md gap-y-xs sm:grid-cols-[max-content_1fr] sm:gap-y-md">
       <div className="contents">
         <dt className="type-label-caps text-meta-text">Role</dt>
         <dd>
-          <RoleControl
-            // Remounts once a change lands, so the select starts from the new role.
-            key={user.role}
-            userId={user.id}
-            name={user.name || user.email}
-            role={user.role}
-            status={user.status}
-            isSelf={isSelf}
-            action={changeUserRole.bind(null, user.id, user.role)}
-          />
+          <p className="type-body-md">{ROLE_LABELS[user.role]}</p>
         </dd>
       </div>
       {user.status === "suspended" && (

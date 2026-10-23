@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 
 import { fetchCurrentUser, isAccountSuspended } from "@/lib/api";
 
-import { AccountProfile, DeletionNote } from "../_components/account-profile";
 import { AccountTabs } from "../_components/account-tabs";
 
 export const metadata: Metadata = {
@@ -29,10 +28,11 @@ export default async function AccountPage() {
       <h1 className="type-headline-md measure mt-md">Account settings</h1>
       <AccountTabs current="settings" />
 
-      <div className="mt-xl">
-        <AccountProfile />
-      </div>
-      <DeletionNote />
+      {/* Clerk's profile would let a visitor rename, re-email or delete a shared account. */}
+      <p className="type-body-md measure mt-xl rounded-sm bg-warning-subtle px-sm py-sm text-warning">
+        Account settings are turned off in this demo: everyone signs in to the
+        same two accounts. Your order history is still here.
+      </p>
     </main>
   );
 }

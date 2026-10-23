@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Show } from "@clerk/nextjs";
 
+import { PERSONAS } from "@/lib/demo";
+
 import type { HeroContent } from "./types";
 
 export function Hero({ content }: { content: HeroContent }) {
@@ -17,12 +19,18 @@ export function Hero({ content }: { content: HeroContent }) {
           when="signed-in"
           fallback={
             <>
-              <Link href="/sign-up" className="button-primary">
-                Create your account
-              </Link>
-              <Link href="/sign-in" className="button-secondary">
-                Sign in
-              </Link>
+              {PERSONAS.map((persona, index) => (
+                // Not <Link>: a prefetch would mint a sign-in token.
+                <a
+                  key={persona}
+                  href={`/demo/${persona}`}
+                  className={
+                    index === 0 ? "button-primary" : "button-secondary"
+                  }
+                >
+                  Try as {persona}
+                </a>
+              ))}
             </>
           }
         >

@@ -6,6 +6,7 @@ import type {
   EnrollmentStatus,
 } from "@/lib/api";
 
+import { DemoDisabled } from "../../_components/demo-disabled";
 import { formatDate } from "../../_lib/format";
 import { StatusBadge as CourseStatusBadge } from "../../courses/_components/status-badge";
 import { SOURCE_LABELS } from "../_lib/enrollment";
@@ -26,11 +27,14 @@ export function Enrollments({
   name,
   enrollments,
   courses,
+  revocable,
 }: {
   userId: string;
   name: string;
   enrollments: AdminEnrollment[];
   courses: AdminCourseSummary[];
+  /** False for the shared demo accounts, whose enrollments the demo keeps. */
+  revocable: boolean;
 }) {
   const enrolledIds = new Set(enrollments.map((row) => row.course.id));
   const grantable: GrantableCourse[] = courses
@@ -42,7 +46,11 @@ export function Enrollments({
       {enrollments.length === 0 ? (
         <p className="type-body-md mt-md">No enrollments.</p>
       ) : (
-        <EnrollmentTable name={name} enrollments={enrollments} />
+        <EnrollmentTable
+          name={name}
+          enrollments={enrollments}
+          revocable={revocable}
+        />
       )}
       {courses.length === 0 ? (
         <p className="type-body-sm mt-lg text-meta-text">
@@ -65,9 +73,11 @@ export function Enrollments({
 function EnrollmentTable({
   name,
   enrollments,
+  revocable,
 }: {
   name: string;
   enrollments: AdminEnrollment[];
+  revocable: boolean;
 }) {
   const headerClassName = "type-label-md px-sm py-sm text-accent";
 
@@ -136,7 +146,9 @@ function EnrollmentTable({
                 <Progress enrollment={enrollment} />
               </td>
               <td className="px-sm py-sm text-right">
-                {enrollment.status === "active" ? (
+                {enrollment.status === "active" && !revocable ? (
+                  <DemoDisabled />
+                ) : enrollment.status === "active" ? (
                   <RevokeDialog
                     name={name}
                     courseTitle={enrollment.course.title}

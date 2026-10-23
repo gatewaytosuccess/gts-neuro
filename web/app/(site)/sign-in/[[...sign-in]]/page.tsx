@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import { SignIn } from "@clerk/nextjs";
 
 import { AuthSplitPanel } from "@/components/auth-split-panel";
+import { PersonaChoice } from "@/components/persona-choice";
 
 export const metadata: Metadata = {
   title: "Sign in",
 };
 
-/* Forgot-password lives inside this component's own flow, under the same path. */
+// The demo accounts have no passwords; they sign in with a one-time token.
 export default function SignInPage() {
   return (
-    <AuthSplitPanel eyebrow="Welcome back" headline="Sign in to continue">
-      <SignIn
-        path="/sign-in"
-        signUpUrl="/sign-up"
-        fallbackRedirectUrl="/dashboard"
-      />
+    <AuthSplitPanel eyebrow="Demo" headline="Choose how to look around">
+      <PersonaChoice />
     </AuthSplitPanel>
   );
 }

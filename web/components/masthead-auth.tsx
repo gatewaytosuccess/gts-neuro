@@ -23,8 +23,8 @@ export function MastheadAuth() {
           >
             Sign in
           </Link>
-          <Link href="/sign-up" className="button-primary whitespace-nowrap">
-            Get started
+          <Link href="/sign-in" className="button-primary whitespace-nowrap">
+            Try the demo
           </Link>
         </>
       }

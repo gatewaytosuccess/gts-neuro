@@ -13,6 +13,8 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 UPLOAD_EXPIRES_SECONDS = 15 * 60
+# Seeded demo media. The nightly reset can't re-upload it, so it's never deleted.
+DEMO_PREFIXES = ("thumbnails/demo/", "lessons/demo/")
 
 
 @functools.cache
@@ -61,6 +63,11 @@ def presign_download(bucket, key, expires):
     )
 
 
+def upload_file(bucket, key, path, content_type):
+    """Uploads a local file, replacing any object at ``key``. Failures raise."""
+    _client().upload_file(str(path), bucket, key, ExtraArgs={"ContentType": content_type})
+
+
 def head(bucket, key):
     """The object's metadata, or ``None`` if it doesn't exist. Other failures raise."""
     try:
@@ -72,7 +79,13 @@ def head(bucket, key):
 
 
 def delete(bucket, key):
-    """Best effort: a failure is logged, never raised, and leaves an orphan."""
+    """Best effort: a failure is logged, never raised, and leaves an orphan.
+
+    Keys under ``DEMO_PREFIXES`` are skipped.
+    """
+    if key.startswith(DEMO_PREFIXES):
+        logger.info("Keeping demo object s3://%s/%s", bucket, key)
+        return
     try:
         _client().delete_object(Bucket=bucket, Key=key)
     except (BotoCoreError, ClientError):
