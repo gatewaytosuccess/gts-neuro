@@ -111,6 +111,13 @@ class TestRequestUpload:
         assert body["fields"]["key"] == body["key"]
         assert body["fields"]["Content-Type"] == "image/png"
 
+    def test_the_key_folder_nests_the_key(self, client, admin, course, s3, settings):
+        settings.S3_KEY_FOLDER = "dev"
+
+        body = request_upload(client, course, content_type="image/png").json()
+
+        assert body["key"].startswith(f"thumbnails/dev/{course.pk}/")
+
     def test_the_policy_allows_up_to_5_mb(self, client, admin, course, s3):
         body = request_upload(client, course, content_type="image/webp").json()
 

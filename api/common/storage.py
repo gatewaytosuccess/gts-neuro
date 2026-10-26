@@ -15,6 +15,12 @@ logger = logging.getLogger(__name__)
 UPLOAD_EXPIRES_SECONDS = 15 * 60
 
 
+def key_prefix(folder, object_id):
+    """``<folder>/<id>/``, with ``S3_KEY_FOLDER`` between the two when it's set."""
+    parts = (folder, settings.S3_KEY_FOLDER, str(object_id))
+    return "".join(f"{part}/" for part in parts if part)
+
+
 @functools.cache
 def _client():
     return boto3.client(

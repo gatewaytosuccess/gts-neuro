@@ -196,7 +196,9 @@ access key for the user (*Application running outside AWS*).
 **`.env`.** Fill in `AWS_S3_REGION_NAME`, `AWS_ACCESS_KEY_ID`,
 `AWS_SECRET_ACCESS_KEY`, `AWS_PRIVATE_BUCKET_NAME`,
 `AWS_THUMBNAIL_BUCKET_NAME`, and `CLOUDFRONT_DOMAIN` (the distribution's
-domain, such as `d1234abcd.cloudfront.net`, with no `https://`).
+domain, such as `d1234abcd.cloudfront.net`, with no `https://`). If the
+buckets are shared with another environment, set `S3_KEY_FOLDER=dev` so dev's
+uploads land under `lessons/dev/` and `thumbnails/dev/`.
 
 To check it once both servers are running, sign in as an admin and upload a
 thumbnail on a draft course at `/admin/courses/<id>` (the seeded draft, or one
