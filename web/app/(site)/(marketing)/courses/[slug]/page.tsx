@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Markdown } from "@/components/markdown";
 import {
   ApiError,
@@ -113,7 +113,7 @@ export default async function CoursePage({
   if (course === null) {
     return (
       <div className="mx-auto max-w-[1200px] px-md py-2xl sm:px-margin lg:py-3xl">
-        <AllCoursesLink />
+        <Breadcrumbs items={[{ label: "Courses", href: "/courses" }]} />
         <p className="type-body-sm mt-xl rounded-sm bg-warning-subtle px-sm py-sm text-warning">
           The course API is not responding, so this course is unavailable.
         </p>
@@ -138,7 +138,12 @@ export default async function CoursePage({
       {/* Under md the panel sits between the header and the body, in source order. */}
       <div className="mx-auto grid max-w-[1200px] gap-xl px-md py-2xl sm:px-margin md:grid-cols-12 md:gap-x-gutter lg:py-3xl">
         <header className="min-w-0 md:col-span-7">
-          <AllCoursesLink />
+          <Breadcrumbs
+            items={[
+              { label: "Courses", href: "/courses" },
+              { label: course.title },
+            ]}
+          />
           <p className="type-label-caps mt-xl text-accent">Course</p>
           <h1 className="type-headline-sm mt-sm break-words lg:type-headline-md">
             {course.title}
@@ -203,14 +208,6 @@ export default async function CoursePage({
         }
       />
     </>
-  );
-}
-
-function AllCoursesLink() {
-  return (
-    <Link href="/courses" className="type-label-md text-primary underline">
-      &larr; All courses
-    </Link>
   );
 }
 

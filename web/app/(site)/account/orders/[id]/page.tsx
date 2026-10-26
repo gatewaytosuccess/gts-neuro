@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   ApiError,
   fetchOrder,
@@ -42,12 +43,12 @@ export default async function ReceiptPage({
 
   return (
     <main className="mx-auto w-full max-w-[1200px] flex-1 px-md py-2xl sm:px-margin">
-      <Link
-        href="/account/orders"
-        className="type-label-md text-primary hover:underline"
-      >
-        <span aria-hidden="true">←</span> Order history
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: "Order history", href: "/account/orders" },
+          ...(order === null ? [] : [{ label: "Receipt" }]),
+        ]}
+      />
 
       {order === null ? (
         <p className="type-body-sm mt-xl rounded-sm bg-warning-subtle px-sm py-sm text-warning">

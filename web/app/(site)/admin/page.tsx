@@ -66,7 +66,7 @@ function SectionCard({ section }: { section: AdminSection }) {
 
   if (!section.available) {
     return (
-      <div className="h-full rounded-lg bg-paper-raised p-lg opacity-60">
+      <div className="h-full rounded-lg border border-rule bg-paper-raised p-lg opacity-60">
         {body}
       </div>
     );
@@ -75,7 +75,7 @@ function SectionCard({ section }: { section: AdminSection }) {
   return (
     <Link
       href={section.href}
-      className="block h-full rounded-lg border border-transparent bg-paper-raised p-lg hover:border-border-strong"
+      className="block h-full rounded-lg border border-rule bg-paper-raised p-lg hover:border-border-strong"
     >
       {body}
     </Link>

@@ -165,7 +165,7 @@ function CourseCard({
   return (
     <Link
       href={`/courses/${course.slug}`}
-      className="group flex h-full flex-col rounded-lg bg-paper-raised p-lg"
+      className="group flex h-full flex-col rounded-lg border border-rule bg-paper-raised p-lg transition-[box-shadow,translate,border-color] duration-100 hover:-translate-y-0.5 hover:border-border-strong/60 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
       {course.thumbnail_url ? (
         // CloudFront's domain is a Django setting, so next/image has no host to allowlist.

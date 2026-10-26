@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 
 import { AccountMenu } from "@/components/account-menu";
+import { Chevron } from "@/components/chevron";
 
 export function ViewerHeader({
   slug,
@@ -31,9 +32,9 @@ export function ViewerHeader({
         <Link
           href={`/courses/${encodeURIComponent(slug)}`}
           aria-label="Back to the course page"
-          className="type-label-lg -mx-sm px-sm py-xs text-dark-primary hover:text-dark-primary-strong"
+          className="grid size-8 shrink-0 place-items-center rounded-md border border-dark-border-strong text-dark-primary hover:border-dark-primary hover:bg-dark-surface-overlay"
         >
-          &larr;
+          <Chevron direction="left" />
         </Link>
         {onOpenCurriculum && (
           <button

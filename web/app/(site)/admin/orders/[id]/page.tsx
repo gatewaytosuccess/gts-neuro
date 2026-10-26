@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ApiError, fetchAdminOrder, type AdminOrderDetail } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
 
@@ -33,7 +34,7 @@ export default async function AdminOrderPage({
     if (error instanceof ApiError && error.status === 404) notFound();
     return (
       <div>
-        <BackLink />
+        <Crumbs />
         <p className="type-body-sm mt-md rounded-sm bg-warning-subtle px-sm py-sm text-warning">
           The course API is not responding, so this order is unavailable.
         </p>
@@ -45,7 +46,7 @@ export default async function AdminOrderPage({
 
   return (
     <div>
-      <BackLink />
+      <Crumbs current={`Order of ${formatDate(order.created_at)}`} />
       <Header order={order} />
 
       <section aria-labelledby="buyer-heading" className="mt-2xl">
@@ -90,14 +91,14 @@ export default async function AdminOrderPage({
   );
 }
 
-function BackLink() {
+function Crumbs({ current }: { current?: string }) {
   return (
-    <Link
-      href="/admin/orders"
-      className="type-label-md text-primary hover:underline"
-    >
-      <span aria-hidden="true">←</span> All orders
-    </Link>
+    <Breadcrumbs
+      items={[
+        { label: "Orders", href: "/admin/orders" },
+        ...(current ? [{ label: current }] : []),
+      ]}
+    />
   );
 }
 
