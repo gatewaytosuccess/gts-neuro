@@ -398,7 +398,9 @@ Spacing runs on an **8px base** (`spacing.xs` through `spacing.3xl`). Density is
 
 Depth is carried almost entirely by **tonal layering and hairline rules**, not shadows — consistent with the Editorial/Archival lineage this system draws from. `paper` → `paper-raised` → `paper-dim` is a three-step ladder used to separate page, card, and banded section without a single drop shadow between them. `divider` (`rule`) separates content within a section; `divider-strong` (`border-strong`) marks an actual component boundary, like an input or a table header rule.
 
-The one exception is genuinely floating layers — dropdown menus, the enrollment modal, tooltips — which get a single soft shadow level, warm-tinted from `accent-strong` at low opacity with a top-down light direction (never neutral black). Nothing else in the system casts a shadow; a card sitting on the page is not floating, so it doesn't get one.
+Cards carry a 1px `rule` hairline on top of their `paper-raised` fill, so the edge of a card reads even where the tonal step alone is too slight.
+
+The one exception is genuinely floating layers — dropdown menus, the enrollment modal, tooltips — which get a single soft shadow level, warm-tinted from `accent-strong` at low opacity with a top-down light direction (never neutral black). A card sitting on the page is not floating, so at rest it doesn't get one. A card that is itself a link (a catalog course card) may take the `shadow-lift` level and rise 2px while hovered, and only then: the shadow appears in response to the pointer, so it signals "this is clickable" rather than decorating the page. The lift is dropped under `prefers-reduced-motion`. Nothing else casts a shadow.
 
 In dark mode the elevation logic inverts, as it must: raised surfaces get *lighter*, not shadowed. `dark-bg` → `dark-surface` → `dark-surface-overlay` is the equivalent three-step ladder, and it does the same grouping job the light-mode tonal steps do.
 
@@ -408,11 +410,13 @@ In dark mode the elevation logic inverts, as it must: raised surfaces get *light
 
 Radius is small and hierarchical, tightening toward the more "documentary" elements and loosening toward the more "friendly" ones: `rounded.xs` (2px) on media frames and thumbnails, keeping imagery reading as content rather than as a UI chrome; `rounded.sm` (4px) on inputs, the sharpest interactive element, matching the precision the parent brand's finance heritage implies; `rounded.md` (6px) on buttons; `rounded.lg` (10px) on cards and overlays, the softest surfaces in the system; `rounded.full` on chips, badges, and progress bars, marking them as a distinct pill-shaped class of object.
 
-Borders are 1px solid `rule` at rest for plain dividers and 1px solid `border-strong` for input and table boundaries, moving to 1px `primary` on focus (2px offset), which clears 3:1 against every light-mode surface. These values are specified here in prose, rather than as component tokens, because the DESIGN.md component schema has no `borderColor` sub-token — the values are normative regardless of where they're written down. In dark mode the same roles are carried by `dark-rule` and `dark-border-strong`.
+Borders are 1px solid `rule` at rest for plain dividers and card edges, and 1px solid `border-strong` for input and table boundaries, moving to 1px `primary` on focus (2px offset), which clears 3:1 against every light-mode surface. These values are specified here in prose, rather than as component tokens, because the DESIGN.md component schema has no `borderColor` sub-token — the values are normative regardless of where they're written down. In dark mode the same roles are carried by `dark-rule` and `dark-border-strong`.
 
 ## Components
 
 **Buttons.** `button-primary` is the only button that uses Brass Seal, and it is the only element on any given screen that should. It's a solid `tertiary` fill with dark `accent-strong` text (7.0:1) — not white text, which fails badly against a mid-lightness gold (2.3:1). Hover darkens to `tertiary-strong` and flips the text to `paper-raised`. `button-secondary` is an outline treatment: `paper` fill, `primary` text and border, for anything that isn't the page's single primary action — "Learn more," "View syllabus." There is no tertiary/ghost button; if a screen needs a third level of emphasis, it has too many competing asks.
+
+**Navigation controls.** Directional navigation — Previous/Next in the lesson viewer, the viewer's back button, row and breadcrumb separators — uses a drawn chevron icon, never a `←`/`→` text character. Previous/Next are `button-secondary-dark` with the chevron on the outer side. A list row whose only job is to open something (a course on the dashboard, an order in the order history) is one link across the whole row, with a trailing chevron that shifts right on hover, rather than a small text link at its end. Detail pages show where they sit with a breadcrumb trail (`Courses › Foundations of Neurolinguistics`) instead of a lone back link.
 
 **Masthead.** Solid `primary` fill, `primary-subtle` link text at rest, `tertiary` text for the active/current nav item — the one place outside a button where Brass Seal is allowed, because "where you are right now" is a form of progress indication, not decoration. The wordmark sits at full `paper-raised` contrast against the same navy field.
 
@@ -441,6 +445,6 @@ Borders are 1px solid `rule` at rest for plain dividers and 1px solid `border-st
 - **Do** pair every error state with a written message, never color alone.
 - **Don't** center headlines or hero copy. The system is flush-left and asymmetric throughout — a centered hero is the fastest way to make this look like a generic SaaS template instead of a course catalog.
 - **Do** use the curriculum list as a numbered, rule-divided list, not a card grid. Cards are for the stat band and testimonials — genuinely distinct, comparable objects — not for a sequential syllabus.
-- **Don't** add a shadow to anything that isn't a dropdown, modal, or tooltip. Depth elsewhere comes from the paper/paper-raised/paper-dim tonal ladder and hairline rules.
+- **Don't** add a shadow to anything that isn't a dropdown, modal, tooltip, or a clickable card while it's hovered. Depth elsewhere comes from the paper/paper-raised/paper-dim tonal ladder and hairline rules.
 - **Do** cap body and lesson text at roughly 68 characters. Course content is read at length, not skimmed.
 - **Don't** add a third font weight, or use Fraunces below headline size, or Source Sans 3 above it. The voice/apparatus split is the whole hierarchy system.

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   ApiError,
   fetchAdminUser,
@@ -63,7 +64,7 @@ export default async function AdminUserPage({
     if (error instanceof ApiError && error.status === 404) notFound();
     return (
       <div>
-        <BackLink />
+        <Crumbs />
         <p className="type-body-sm mt-md rounded-sm bg-warning-subtle px-sm py-sm text-warning">
           The course API is not responding, so this user is unavailable.
         </p>
@@ -73,7 +74,7 @@ export default async function AdminUserPage({
 
   return (
     <div>
-      <BackLink />
+      <Crumbs current={user.name || user.email} />
       <Header user={user} />
 
       <section aria-labelledby="access-heading" className="mt-2xl">
@@ -122,14 +123,14 @@ export default async function AdminUserPage({
   );
 }
 
-function BackLink() {
+function Crumbs({ current }: { current?: string }) {
   return (
-    <Link
-      href="/admin/users"
-      className="type-label-md text-primary hover:underline"
-    >
-      <span aria-hidden="true">←</span> All users
-    </Link>
+    <Breadcrumbs
+      items={[
+        { label: "Users", href: "/admin/users" },
+        ...(current ? [{ label: current }] : []),
+      ]}
+    />
   );
 }
 

@@ -37,7 +37,7 @@ export function CoursePreview({ courses }: { courses: Course[] }) {
 
 function CourseCard({ course }: { course: Course }) {
   return (
-    <article className="flex h-full flex-col rounded-lg bg-paper-raised p-lg">
+    <article className="flex h-full flex-col rounded-lg border border-rule bg-paper-raised p-lg">
       {/* Thumbnail frame until course imagery exists. */}
       <div aria-hidden className="h-[220px] rounded-xs bg-paper-dim" />
 

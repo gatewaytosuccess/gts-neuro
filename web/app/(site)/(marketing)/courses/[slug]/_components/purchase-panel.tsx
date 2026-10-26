@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Chevron } from "@/components/chevron";
 import type { CourseDetail } from "@/lib/api";
 import { formatApproximateDuration, formatPrice } from "@/lib/format";
 
@@ -19,7 +20,7 @@ export function PurchasePanel({
   return (
     <aside
       aria-label={enrollment === "none" ? "Enroll" : "Your enrollment"}
-      className={`rounded-lg bg-paper-raised p-lg ${className}`}
+      className={`rounded-lg border border-rule bg-paper-raised p-lg ${className}`}
     >
       {course.thumbnail_url && (
         // CloudFront's domain is a Django setting, so next/image has no host to allowlist.
@@ -78,9 +79,10 @@ export function PurchasePanel({
         <p className="mt-lg border-t border-rule pt-md">
           <Link
             href={`/admin/courses/${course.id}`}
-            className="type-label-md text-primary underline hover:text-primary-strong"
+            className="type-label-md inline-flex items-center gap-xs text-primary hover:text-primary-strong"
           >
-            Edit in admin &rarr;
+            <span className="underline">Edit in admin</span>
+            <Chevron direction="right" />
           </Link>
         </p>
       )}

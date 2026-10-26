@@ -4,6 +4,12 @@ from botocore.stub import Stubber
 from common import storage
 
 
+@pytest.fixture(autouse=True)
+def no_s3_key_folder(settings):
+    """Ignores any ``S3_KEY_FOLDER`` set in the local ``.env``."""
+    settings.S3_KEY_FOLDER = ""
+
+
 @pytest.fixture
 def s3(settings):
     """A ``Stubber`` on the storage module's client, with fake credentials.

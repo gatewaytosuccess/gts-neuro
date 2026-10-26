@@ -144,6 +144,8 @@ AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", "")
 AWS_PRIVATE_BUCKET_NAME = env("AWS_PRIVATE_BUCKET_NAME", "")
 AWS_THUMBNAIL_BUCKET_NAME = env("AWS_THUMBNAIL_BUCKET_NAME", "")
 CLOUDFRONT_DOMAIN = env("CLOUDFRONT_DOMAIN", "")
+# Keeps this environment's uploads apart from another's in shared buckets.
+S3_KEY_FOLDER = env("S3_KEY_FOLDER", "")
 
 # The two shared demo accounts. The seed creates them; the guard protects their enrollments.
 DEMO_LEARNER_EMAIL = env("DEMO_LEARNER_EMAIL", "")
