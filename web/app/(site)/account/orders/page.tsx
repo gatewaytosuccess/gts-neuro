@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Chevron } from "@/components/chevron";
 import {
   fetchOrders,
   isAccountSuspended,
@@ -58,41 +59,42 @@ function OrderList({ orders }: { orders: PurchasedOrder[] }) {
       {orders.map((order) => {
         const date = formatDate(order.created_at);
         return (
-          <li
-            key={order.id}
-            className="flex flex-col gap-sm border-t border-rule py-md sm:flex-row sm:items-center sm:gap-lg"
-          >
-            <div className="min-w-0 flex-1">
-              <time
-                dateTime={order.created_at}
-                className="type-caption text-meta-text"
-              >
-                {date}
-              </time>
-              <ul className="mt-xs">
-                {order.items.map((item) => (
-                  <li
-                    key={item.course_slug}
-                    className="type-label-lg break-words"
-                  >
-                    {item.course_title}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex items-center gap-md">
-              <OrderStatusBadge status={order.status} />
-              <span className="type-data-md tabular-nums">
-                {formatPrice(order.total_cents)}
-              </span>
-            </div>
+          <li key={order.id} className="border-t border-rule">
             <Link
               href={`/account/orders/${encodeURIComponent(order.id)}`}
-              className="type-label-md shrink-0 text-tertiary-strong hover:underline"
+              className="group -mx-sm flex items-center gap-md rounded-md px-sm py-md hover:bg-paper-raised"
             >
-              Receipt
-              <span className="sr-only"> for the order of {date}</span>{" "}
-              <span aria-hidden>→</span>
+              <div className="flex min-w-0 flex-1 flex-col gap-sm sm:flex-row sm:items-center sm:gap-lg">
+                <div className="min-w-0 flex-1">
+                  <span className="sr-only">Receipt for the order of </span>
+                  <time
+                    dateTime={order.created_at}
+                    className="type-caption text-meta-text"
+                  >
+                    {date}
+                  </time>
+                  <ul className="mt-xs">
+                    {order.items.map((item) => (
+                      <li
+                        key={item.course_slug}
+                        className="type-label-lg break-words text-accent-strong group-hover:text-primary"
+                      >
+                        {item.course_title}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex items-center gap-md">
+                  <OrderStatusBadge status={order.status} />
+                  <span className="type-data-md tabular-nums">
+                    {formatPrice(order.total_cents)}
+                  </span>
+                </div>
+              </div>
+              <Chevron
+                direction="right"
+                className="text-meta-text transition-transform duration-100 group-hover:translate-x-[3px] group-hover:text-tertiary-strong motion-reduce:transition-none"
+              />
             </Link>
           </li>
         );

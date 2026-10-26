@@ -29,7 +29,7 @@ export function Testimonials({
         {rest.map((testimonial) => (
           <figure
             key={testimonial.name}
-            className="flex flex-col justify-between gap-lg rounded-lg bg-paper-raised p-lg"
+            className="flex flex-col justify-between gap-lg rounded-lg border border-rule bg-paper-raised p-lg"
           >
             <blockquote className="type-quote">
               “{testimonial.quote}”

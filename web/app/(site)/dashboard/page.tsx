@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Chevron } from "@/components/chevron";
 import {
   fetchCurrentUser,
   fetchEnrollments,
@@ -96,7 +97,7 @@ function ContinueCard({ enrollment }: { enrollment: Enrollment }) {
   return (
     <section
       aria-labelledby="continue-heading"
-      className="mt-xl flex flex-col gap-lg rounded-lg bg-paper-raised p-lg sm:flex-row sm:items-center"
+      className="mt-xl flex flex-col gap-lg rounded-lg border border-rule bg-paper-raised p-lg sm:flex-row sm:items-center"
     >
       <Thumbnail
         url={enrollment.course_thumbnail_url}
@@ -131,30 +132,27 @@ function CourseList({ enrollments }: { enrollments: Enrollment[] }) {
       </h2>
       <ul className="mt-md">
         {enrollments.map((enrollment) => (
-          <li
-            key={enrollment.id}
-            className="flex flex-col gap-md border-t border-rule py-md sm:flex-row sm:items-center"
-          >
-            <Thumbnail
-              url={enrollment.course_thumbnail_url}
-              className="hidden h-[64px] w-[112px] shrink-0 sm:block"
-            />
-            <div className="min-w-0 flex-1">
-              <Link
-                href={`/courses/${encodeURIComponent(enrollment.course_slug)}`}
-                className="type-label-lg break-words text-accent-strong hover:text-primary hover:underline"
-              >
-                {enrollment.course_title}
-              </Link>
-              <CourseProgress enrollment={enrollment} />
-            </div>
+          <li key={enrollment.id} className="border-t border-rule">
+            {/* The whole row is the link, so the title can't be one too. */}
             <Link
               href={continueHref(enrollment)}
-              className="type-label-md shrink-0 text-tertiary-strong hover:underline"
+              className="group -mx-sm flex items-center gap-md rounded-md px-sm py-md hover:bg-paper-raised"
             >
-              Continue
-              <span className="sr-only"> {enrollment.course_title}</span>{" "}
-              <span aria-hidden>→</span>
+              <Thumbnail
+                url={enrollment.course_thumbnail_url}
+                className="hidden h-[64px] w-[112px] shrink-0 sm:block"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="type-label-lg break-words text-accent-strong group-hover:text-primary">
+                  <span className="sr-only">Continue </span>
+                  {enrollment.course_title}
+                </p>
+                <CourseProgress enrollment={enrollment} />
+              </div>
+              <Chevron
+                direction="right"
+                className="text-meta-text transition-transform duration-100 group-hover:translate-x-[3px] group-hover:text-tertiary-strong motion-reduce:transition-none"
+              />
             </Link>
           </li>
         ))}

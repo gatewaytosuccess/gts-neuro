@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ApiError, fetchAdminLesson, type AdminLesson } from "@/lib/api";
 
 import { requireAdmin } from "../../../../_lib/require-admin";
@@ -42,32 +42,16 @@ export default async function AdminLessonPage({
 
   return (
     <div>
-      <nav aria-label="Breadcrumb">
-        <ol className="type-label-md flex flex-wrap items-center gap-x-sm gap-y-xs text-meta-text">
-          <li>
-            <Link
-              href="/admin/courses"
-              className="text-primary hover:underline"
-            >
-              Courses
-            </Link>
-          </li>
-          <li className="flex items-center gap-x-sm">
-            <span aria-hidden="true">/</span>
-            <Link
-              href={`/admin/courses/${lesson.course.id}`}
-              className="text-primary hover:underline"
-            >
-              {lesson.course.title}
-            </Link>
-          </li>
-          <li className="flex items-center gap-x-sm">
-            <span aria-hidden="true">/</span>
-            Module {String(lesson.module.position).padStart(2, "0")} ·{" "}
-            {lesson.module.title}
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumbs
+        items={[
+          { label: "Courses", href: "/admin/courses" },
+          {
+            label: lesson.course.title,
+            href: `/admin/courses/${lesson.course.id}`,
+          },
+          { label: lesson.title },
+        ]}
+      />
 
       <h1 className="type-headline-md measure mt-md">{lesson.title}</h1>
 
