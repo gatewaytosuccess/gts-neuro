@@ -1,4 +1,4 @@
-"""Course thumbnails, in the thumbnail bucket under ``thumbnails/<course id>/``."""
+"""Course thumbnails, in the thumbnail bucket under ``thumbnails/[<S3_KEY_FOLDER>/]<course id>/``."""
 
 import uuid
 
@@ -13,7 +13,7 @@ MAX_BYTES = 5 * 1024 * 1024
 
 
 def key_prefix(course):
-    return f"thumbnails/{course.pk}/"
+    return storage.key_prefix("thumbnails", course.pk)
 
 
 def presign_upload(course, content_type):

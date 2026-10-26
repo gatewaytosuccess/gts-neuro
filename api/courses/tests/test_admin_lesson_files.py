@@ -148,6 +148,13 @@ class TestRequestUpload:
         assert {"Content-Type": "application/pdf"} in conditions
         assert ["content-length-range", 1, 100 * 1024**2] in conditions
 
+    def test_the_key_folder_nests_the_key(self, client, admin, lesson, s3, settings):
+        settings.S3_KEY_FOLDER = "dev"
+
+        body = request_upload(client, lesson, kind="video").json()
+
+        assert body["key"].startswith(f"lessons/dev/{lesson.pk}/")
+
     @pytest.mark.parametrize("kind", ["body", "thumbnail", ""])
     def test_refuses_other_kinds(self, client, admin, lesson, s3, kind):
         response = request_upload(client, lesson, kind=kind)

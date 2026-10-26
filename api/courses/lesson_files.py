@@ -1,4 +1,4 @@
-"""Lesson video and slides, in the private bucket under ``lessons/<lesson id>/``."""
+"""Lesson video and slides, in the private bucket under ``lessons/[<S3_KEY_FOLDER>/]<lesson id>/``."""
 
 import uuid
 from dataclasses import dataclass
@@ -27,7 +27,7 @@ VIEWER_DOWNLOAD_EXPIRES_SECONDS = 4 * 60 * 60
 
 
 def key_prefix(lesson):
-    return f"lessons/{lesson.pk}/"
+    return storage.key_prefix("lessons", lesson.pk)
 
 
 def is_upload_for(lesson, kind, key):
