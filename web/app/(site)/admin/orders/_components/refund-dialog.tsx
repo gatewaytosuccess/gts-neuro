@@ -2,9 +2,9 @@
 
 import { useActionState, useId } from "react";
 
+import { Modal, useDialog } from "@/components/dialog";
 import { formatPrice } from "@/lib/format";
 
-import { Modal, useDialog } from "../../users/_components/dialog";
 import type { RefundState } from "../_lib/refund";
 
 type RefundAction = (
