@@ -2,8 +2,9 @@
 
 import { useActionState, useId, type ReactNode } from "react";
 
+import { Modal, useDialog } from "@/components/dialog";
+
 import type { SuspensionState } from "../_lib/suspension";
-import { Modal, useDialog } from "./dialog";
 
 type SuspendAction = (
   state: SuspensionState,
