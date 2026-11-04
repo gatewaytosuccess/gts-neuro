@@ -1,3 +1,4 @@
+import { DemoIntro } from "@/components/demo-intro";
 import { DemoSwitch } from "@/components/demo-switch";
 import { personaUserIds } from "@/lib/demo";
 
@@ -30,6 +31,7 @@ export function DemoBanner({ dark = false }: { dark?: boolean }) {
         </p>
         <DemoSwitch userIds={personaUserIds()} dark={dark} />
       </div>
+      <DemoIntro />
     </aside>
   );
 }
