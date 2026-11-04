@@ -1,4 +1,4 @@
-const CHOICES = [
+export const PERSONA_CHOICES = [
   {
     persona: "learner",
     label: "Try as learner",
@@ -14,7 +14,7 @@ const CHOICES = [
 export function PersonaChoice() {
   return (
     <ul className="flex flex-col gap-lg">
-      {CHOICES.map((choice) => (
+      {PERSONA_CHOICES.map((choice) => (
         <li key={choice.persona}>
           {/* Not <Link>: a prefetch would mint a sign-in token. */}
           <a href={`/demo/${choice.persona}`} className="button-primary">
