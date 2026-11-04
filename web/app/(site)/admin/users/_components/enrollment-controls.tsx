@@ -2,10 +2,10 @@
 
 import { useActionState, useId } from "react";
 
+import { Modal, useDialog } from "@/components/dialog";
 import type { CourseStatus, GrantSource } from "@/lib/api";
 
 import type { EnrollmentActionState } from "../_lib/enrollment";
-import { Modal, useDialog } from "./dialog";
 
 type RowAction = () => Promise<EnrollmentActionState>;
 
