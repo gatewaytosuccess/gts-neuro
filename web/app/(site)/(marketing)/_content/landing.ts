@@ -13,38 +13,6 @@ export const landing: LandingContent = {
     { value: "4.8", label: "Average course rating", placeholder: true },
   ],
 
-  courses: [
-    {
-      slug: "foundations-of-neurolinguistics",
-      title: "Foundations of Neurolinguistics",
-      description: "Where language sits in the brain, and how we found out.",
-      priceCents: 14900,
-      rating: 4.9,
-      ratingCount: 312,
-      placeholder: true,
-    },
-    {
-      slug: "aphasia-and-the-damaged-brain",
-      title: "Aphasia and the Damaged Brain",
-      description:
-        "What losing words after a stroke reveals about how we produce them.",
-      priceCents: 12900,
-      rating: 4.8,
-      ratingCount: 187,
-      placeholder: true,
-    },
-    {
-      slug: "the-bilingual-brain",
-      title: "The Bilingual Brain",
-      description:
-        "How two languages share, compete for, and reshape the same neural space.",
-      priceCents: 12900,
-      rating: 4.7,
-      ratingCount: 143,
-      placeholder: true,
-    },
-  ],
-
   instructor: {
     name: "Dr. Elena Marsh",
     title: "Cognitive neuroscientist and lecturer",
