@@ -14,7 +14,7 @@ export default function LandingPage() {
     <>
       <Hero content={landing.hero} />
       <StatBand stats={landing.stats} />
-      <CoursePreview courses={landing.courses} />
+      <CoursePreview />
       <InstructorCredentials instructor={landing.instructor} />
       <Testimonials testimonials={landing.testimonials} />
       <PricingComparison tiers={landing.pricing} />
