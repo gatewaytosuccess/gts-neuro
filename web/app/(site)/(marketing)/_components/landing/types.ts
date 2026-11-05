@@ -29,32 +29,9 @@ export type Testimonial = Flaggable & {
   context: string;
 };
 
-export type Price = {
-  amountCents: number;
-  period?: string;
-  note?: string;
-};
-
-export type PricingTier = Flaggable & {
-  name: string;
-  summary: string;
-  features: string[];
-  cta: { label: string; href: string };
-  highlighted?: boolean;
-} & (
-    | { billing: "one-time"; price: Price }
-    | { billing: "recurring"; monthly: Price; annual: Price }
-  );
-
-export type LowRiskContent = Flaggable & {
-  line: string;
-};
-
 export type LandingContent = {
   hero: HeroContent;
   stats: Stat[];
   instructor: Instructor;
   testimonials: [Testimonial, Testimonial, Testimonial];
-  pricing: PricingTier[];
-  lowRisk: LowRiskContent;
 };
