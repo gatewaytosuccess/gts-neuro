@@ -16,15 +16,6 @@ export type Stat = Flaggable & {
   label: string;
 };
 
-export type CoursePreview = Flaggable & {
-  slug: string;
-  title: string;
-  description: string;
-  priceCents: number;
-  rating: number;
-  ratingCount: number;
-};
-
 export type Instructor = Flaggable & {
   name: string;
   title: string;
@@ -62,7 +53,6 @@ export type LowRiskContent = Flaggable & {
 export type LandingContent = {
   hero: HeroContent;
   stats: Stat[];
-  courses: CoursePreview[];
   instructor: Instructor;
   testimonials: [Testimonial, Testimonial, Testimonial];
   pricing: PricingTier[];
