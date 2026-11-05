@@ -16,7 +16,8 @@ export function DemoBanner({ dark = false }: { dark?: boolean }) {
     >
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-sm px-md py-sm sm:px-margin">
         <p className="type-body-sm">
-          A demo with sample data, reset every night.
+          A demo with sample data, reset every night. The instructor,
+          testimonials and stats are fictional.
           {repoUrl && (
             <>
               {" "}

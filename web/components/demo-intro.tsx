@@ -46,7 +46,8 @@ export function DemoIntro() {
           This is a demo
         </h2>
         <p className="type-body-md">
-          Everything here is sample data, reset every night.
+          Everything here is sample data, reset every night. The instructor,
+          testimonials and stats are fictional.
         </p>
         <dl className="flex flex-col gap-sm">
           {PERSONA_CHOICES.map((choice) => (

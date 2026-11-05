@@ -36,7 +36,6 @@ def lesson(title, body, **fields):
     return LessonSpec(title, cleandoc(body), **fields)
 
 
-# Slugs, titles, descriptions and prices match the landing page's course preview.
 COURSES = [
     {
         "slug": "foundations-of-neurolinguistics",
