@@ -1,9 +1,8 @@
 import { CoursePreview } from "./_components/landing/course-preview";
 import { Hero } from "./_components/landing/hero";
+import { HowBuyingWorks } from "./_components/landing/how-buying-works";
 import { InstructorCredentials } from "./_components/landing/instructor-credentials";
-import { LowRiskBand } from "./_components/landing/low-risk-band";
 import { NewsletterSignup } from "./_components/landing/newsletter-signup";
-import { PricingComparison } from "./_components/landing/pricing-comparison";
 import { StatBand } from "./_components/landing/stat-band";
 import { Testimonials } from "./_components/landing/testimonials";
 import { landing } from "./_content/landing";
@@ -17,8 +16,7 @@ export default function LandingPage() {
       <CoursePreview />
       <InstructorCredentials instructor={landing.instructor} />
       <Testimonials testimonials={landing.testimonials} />
-      <PricingComparison tiers={landing.pricing} />
-      <LowRiskBand content={landing.lowRisk} />
+      <HowBuyingWorks content={landing.buying} />
       <NewsletterSignup />
     </>
   );

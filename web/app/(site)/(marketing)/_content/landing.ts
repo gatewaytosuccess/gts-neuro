@@ -52,56 +52,19 @@ export const landing: LandingContent = {
     },
   ],
 
-  pricing: [
-    {
-      name: "Single course",
-      summary: "One course, yours to keep.",
-      billing: "one-time",
-      price: { amountCents: 12900, note: "Lifetime access" },
-      features: [
-        "Every lesson in the course",
-        "Downloadable slides and worksheets",
-        "Certificate of completion",
-      ],
-      cta: { label: "Browse courses", href: "/courses" },
-      placeholder: true,
-    },
-    {
-      name: "Bundle",
-      summary: "A curated set of related courses at a discount.",
-      billing: "one-time",
-      price: { amountCents: 32900, note: "Three courses, save 25%" },
-      features: [
-        "Everything in a single course",
-        "Courses sequenced to build on each other",
-        "Lifetime access to every course in the bundle",
-      ],
-      cta: { label: "See bundles", href: "/courses" },
-      placeholder: true,
-    },
-    {
-      name: "All-access",
-      summary: "Every course, including the ones we haven't published yet.",
-      billing: "recurring",
-      monthly: { amountCents: 2900, period: "month" },
-      annual: {
-        amountCents: 24900,
-        period: "year",
-        note: "Two months free",
+  buying: {
+    eyebrow: "Buying a course",
+    title: "One payment, and the course is yours.",
+    items: [
+      {
+        title: "Keep it for good",
+        body: "Pay once and keep lifetime access to every lesson.",
       },
-      features: [
-        "Every published course",
-        "New courses as soon as they launch",
-        "Cancel anytime; courses you bought outright stay yours",
-      ],
-      cta: { label: "Start all-access", href: "/sign-up" },
-      highlighted: true,
-      placeholder: true,
-    },
-  ],
-
-  lowRisk: {
-    line: "Cancel all-access anytime, and if a course isn't for you, ask for a refund within 30 days.",
-    placeholder: true,
+      {
+        title: "Try before you buy",
+        body: "Most courses have free preview lessons, and you can open them without an account.",
+      },
+    ],
+    cta: { label: "Browse courses", href: "/courses" },
   },
 };
