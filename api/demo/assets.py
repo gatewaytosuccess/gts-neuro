@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from django.conf import settings
+
 MEDIA_DIR = Path(__file__).parent / "media"
 
 
@@ -16,8 +18,10 @@ class Asset:
     @property
     def key(self):
         folder = "lessons" if self.private else "thumbnails"
+        # The demo leaves S3_KEY_FOLDER blank; a dev database seeded from this data sets its own.
+        environment = settings.S3_KEY_FOLDER or "demo"
         # Never a course or lesson id, and inside the folders the app's S3 user can already reach.
-        return f"{folder}/demo/{self.filename}"
+        return f"{folder}/{environment}/{self.filename}"
 
     @property
     def path(self):
