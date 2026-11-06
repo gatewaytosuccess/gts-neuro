@@ -19,6 +19,9 @@ export type Stat = Flaggable & {
 export type Instructor = Flaggable & {
   name: string;
   title: string;
+  initials: string;
+  /** The landing teaser. `bio` is the full version, shown only on /about. */
+  summary: string;
   bio: string[];
   credentials: string[];
 };
