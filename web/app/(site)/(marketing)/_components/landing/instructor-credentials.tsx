@@ -11,11 +11,15 @@ export function InstructorCredentials({
   return (
     <section aria-labelledby="instructor-heading" className="bg-paper-dim">
       <div className="mx-auto grid max-w-[1200px] gap-xl px-md py-2xl sm:px-margin md:grid-cols-12 md:gap-gutter lg:py-3xl">
-        {/* Portrait frame until a real photo exists. */}
+        {/* Monogram until a real photo exists. */}
         <div
           aria-hidden
-          className="aspect-[4/5] w-full max-w-[360px] rounded-xs bg-rule md:col-span-4"
-        />
+          className="flex aspect-[4/5] w-full max-w-[360px] items-center justify-center rounded-xs bg-primary md:col-span-4"
+        >
+          <span className="type-display text-primary-pale">
+            {instructor.initials}
+          </span>
+        </div>
 
         <div className="md:col-span-8 lg:col-span-7 lg:col-start-6">
           <p className="type-label-caps text-accent">Your instructor</p>
@@ -32,11 +36,7 @@ export function InstructorCredentials({
             <PlaceholderBadge show={instructor.placeholder} />
           </div>
 
-          {instructor.bio.map((paragraph) => (
-            <p key={paragraph} className="type-body-lg measure mt-md">
-              {paragraph}
-            </p>
-          ))}
+          <p className="type-body-lg measure mt-md">{instructor.summary}</p>
 
           <ul className="measure mt-lg border-b border-rule">
             {instructor.credentials.map((credential) => (
