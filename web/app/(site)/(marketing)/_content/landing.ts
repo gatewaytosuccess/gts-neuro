@@ -16,9 +16,13 @@ export const landing: LandingContent = {
   instructor: {
     name: "Dr. Elena Marsh",
     title: "Cognitive neuroscientist and lecturer",
+    initials: "EM",
+    summary:
+      "Elena has spent fifteen years studying how the brain turns sound into meaning, first in a clinical aphasia lab and then teaching undergraduate cognitive science.",
     bio: [
       "Elena has spent fifteen years studying how the brain turns sound into meaning, first in a clinical aphasia lab and then teaching undergraduate cognitive science.",
-      "She built this course for the people who kept stopping her after public lectures to ask one more question.",
+      "Her research followed people relearning words after a stroke, and what those recoveries reveal about how language is organized in a healthy brain.",
+      "The courses here follow the same structure as her lectures, written for learners without a science background who want more than a popular-science summary.",
     ],
     credentials: [
       "PhD, Cognitive Neuroscience",
