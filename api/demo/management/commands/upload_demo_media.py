@@ -8,7 +8,7 @@ from demo import assets
 
 
 class Command(BaseCommand):
-    help = "Upload api/demo/media/ to the demo's fixed keys in both buckets."
+    help = "Upload api/demo/media/ to both buckets, under S3_KEY_FOLDER or demo/."
 
     def handle(self, *args, **options):
         for asset in assets.ALL:
