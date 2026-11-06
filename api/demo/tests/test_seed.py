@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from commerce.models import Order, OrderStatus
 from common.storage import DEMO_PREFIXES
-from courses.models import Course, Lesson
+from courses.models import Course, CourseStatus, Lesson
 from demo import assets, content
 from enrollments.models import Enrollment, EnrollmentStatus, LessonProgress
 from reviews.models import Review, ReviewStatus
@@ -114,6 +114,33 @@ def test_admin_lists_show_every_kind_of_record():
     assert Enrollment.objects.filter(status=EnrollmentStatus.REVOKED).exists()
     assert Enrollment.objects.filter(order__isnull=True).exists()
     assert Review.objects.filter(status=ReviewStatus.HIDDEN).exists()
+
+
+def test_nothing_happens_before_its_course_exists():
+    seed("--reset")
+
+    for course in Course.objects.all():
+        dates = [
+            *Order.objects.filter(items__course=course).values_list("created_at", flat=True),
+            *Enrollment.objects.filter(course=course).values_list("enrolled_at", flat=True),
+            *LessonProgress.objects.filter(lesson__module__course=course).values_list(
+                "created_at", flat=True
+            ),
+            *Review.objects.filter(course=course).values_list("created_at", flat=True),
+        ]
+        assert all(date > course.created_at for date in dates), course.slug
+
+
+def test_landing_page_previews_the_courses_with_the_most_activity():
+    seed("--reset")
+
+    newest = Course.objects.filter(status=CourseStatus.PUBLISHED).order_by("-created_at")[:3]
+
+    assert {course.slug for course in newest} == {
+        "foundations-of-neurolinguistics",
+        "aphasia-and-the-damaged-brain",
+        "the-bilingual-brain",
+    }
 
 
 def test_every_lesson_has_content_and_media_stays_under_the_demo_prefix():

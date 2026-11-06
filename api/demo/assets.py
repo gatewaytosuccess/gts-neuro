@@ -39,6 +39,12 @@ THUMBNAILS = {
         "aphasia-and-the-damaged-brain",
         "the-bilingual-brain",
         "sign-language-and-the-brain",
+        "reading-and-the-brain",
+        "how-children-learn-to-talk",
+        "hearing-speech",
+        "music-and-language",
+        "stuttering-and-fluency",
+        "primary-progressive-aphasia",
     )
 }
 VIDEO = Asset("journey-of-sound.mp4", "video/mp4", private=True)
